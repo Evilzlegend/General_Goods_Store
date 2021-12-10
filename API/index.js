@@ -31,7 +31,7 @@ db.once('open', () => {
 });
 
 //Schema/Model Declaration
-require('./Models/appliancesObject');
+require('./Models/applianceObject');
 require('./Models/electronicsObject');
 require('./Models/hardwareObject');
 require('./Models/homegoodsObject');
