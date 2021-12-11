@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 
 const PORT = 1200;
 
-const dbUrl = 'mongodb+srv://dbUser:w@#EM7pV!L4V@ggs-001.3tome.mongodb.net/GeneralGoodsStore?retryWrites=true&w=majority';
+const dbUrl = 'mongodb+srv://dbUser:8ISAXbNK7sXUhGH9@ggs-001.3tome.mongodb.net/GeneralGoodsStore?retryWrites=true&w=majority';
               
 mongoose.connect(dbUrl,
     {
