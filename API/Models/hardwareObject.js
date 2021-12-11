@@ -11,6 +11,16 @@ const Hardware = new Schema({
         type: String,
         required: true
     },
+    hardwarePrice:
+    {
+        type: String,
+        required: true
+    },
+    hardwareQuantity:
+    {
+        type: String, 
+        required: true
+    },
 
     hardwareYear: {
         type: String,

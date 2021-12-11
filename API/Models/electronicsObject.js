@@ -12,6 +12,16 @@ const Electronics = new Schema({
         type: String,
         required: true
     },
+    electronicsPrice:
+    {
+        type: String,
+        required: true
+    },
+    electronicsQuantity:
+    {
+        type: String, 
+        required: true
+    },
 
     electronicsYear:
     {

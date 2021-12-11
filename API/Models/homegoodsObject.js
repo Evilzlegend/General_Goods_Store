@@ -11,6 +11,16 @@ const Homegoods = new Schema({
         type: String,
         required: true
     },
+    homegoodsPrice:
+    {
+        type: String,
+        required: true
+    },
+    homegoodsQuantity:
+    {
+        type: String, 
+        required: true
+    },
 
     homegoodsYear: {
         type: String,

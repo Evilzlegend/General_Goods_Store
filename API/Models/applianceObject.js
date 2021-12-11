@@ -12,6 +12,16 @@ const Appliance = new Schema({
         type: String,
         required: true
     },
+    appliancePrice:
+    {
+        type: String,
+        required: true
+    },
+    applianceQuantity:
+    {
+        type: String, 
+        required: true
+    },
 
     applianceYear:
     {

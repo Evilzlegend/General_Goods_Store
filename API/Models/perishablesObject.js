@@ -16,6 +16,16 @@ const Perishables = new Schema({
         type: Date,
         required: true
     },
+    perishablePrice:
+    {
+        type: String,
+        required: true
+    },
+    perishableQuantity:
+    {
+        type: String, 
+        required: true
+    },
 
     perishablesExpiration: {
         type: Date,
