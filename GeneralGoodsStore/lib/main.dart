@@ -1,6 +1,8 @@
 //import 'dart:js_util';
 import 'dart:ui';
 
+import 'package:test_app/Models/perishables.dart';
+
 import 'api.dart';
 import 'package:flutter/material.dart';
 //import 'dart:developer';
@@ -40,13 +42,23 @@ class _MyHomePageState extends State<MyHomePage> {
   List Hardware = [];
   List Homegoods = [];
   List Perishables = [];
+  List<String> Titles = [
+    "Appliances",
+    "Eletronics",
+    "Hardware",
+    "HomeGoods",
+    "Perishables"
+  ];
+
+  int updateValue = 0;
 
   void _UpdateApp(DragEndDetails details) {
     int NewCoice = MenuChoice;
 
     print(details.primaryVelocity);
+    print(details.hashCode.toString());
 
-    if (double.parse(details.primaryVelocity.toString()) > 0) {
+    if (double.parse(details.primaryVelocity.toString()) < 0) {
       if (NewCoice == 4) {
         NewCoice = 0;
       } else {
@@ -63,6 +75,10 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       MenuChoice = NewCoice;
     });
+  }
+
+  void _UpdateValue(DragStartDetails details) {
+    print(details.localPosition);
   }
 
   void initState() {
@@ -103,17 +119,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: (MenuChoice == 0)
-              ? Text("Appliances")
-              : (MenuChoice == 1)
-                  ? Text("Electronics")
-                  : (MenuChoice == 2)
-                      ? Text("HardWare")
-                      : (MenuChoice == 3)
-                          ? Text("HomeGoods")
-                          : Text("Perishables"),
+          title: Text(Titles[MenuChoice]),
         ),
         body: GestureDetector(
+          onHorizontalDragStart: _UpdateValue,
           onHorizontalDragEnd: _UpdateApp,
           child: (MenuChoice == 0)
               ? Column(
@@ -193,14 +202,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: ListView(
                                     shrinkWrap: true,
                                     children: [
-                                      ...Homegoods.map<Widget>((Homegood) =>
+                                      ...Perishables.map<Widget>((Homegood) =>
                                           _buildExpirable(
                                               Homegood['perishableBrand'],
-                                              Homegood['perishableModel'],
+                                              Homegood['perishableName'],
                                               "\$" +
                                                   Homegood['perishablePrice'],
-                                              Colors.grey,
-                                              Homegood['perishableStockDate']))
+                                              Colors.pink.shade100,
+                                              DateTime.parse(Homegood[
+                                                  'perishableExpiration'])))
                                     ],
                                   ),
                                 )
@@ -226,7 +236,10 @@ Widget _buildAppliance(
                 ),
                 width: 75,
               ),
-              title: Text(title),
+              title: Text(
+                title,
+                style: TextStyle(fontSize: 20),
+              ),
               subtitle: Text(subTitle),
               tileColor: BackgroundColor,
             )
@@ -239,12 +252,12 @@ Widget _buildAppliance(
 
 Widget _buildExpirable(String title, String subTitle, String price,
     Color BackgroundColor, DateTime ExpireDate) {
-  DateTime AddedDate = ExpireDate.add(const Duration(days: 30));
+  DateTime AddedDate = ExpireDate.add(const Duration(days: 0));
 
   String DateString = AddedDate.year.toString() +
       " " +
       AddedDate.month.toString() +
-      "" +
+      " " +
       AddedDate.day.toString();
 
   Widget returnValue = Padding(
@@ -261,7 +274,10 @@ Widget _buildExpirable(String title, String subTitle, String price,
                 ),
                 width: 75,
               ),
-              title: Text(title),
+              title: Text(
+                title,
+                style: TextStyle(fontSize: 20),
+              ),
               subtitle: Text(subTitle + "\n" + "Will expire on " + DateString),
               tileColor: BackgroundColor,
             )
