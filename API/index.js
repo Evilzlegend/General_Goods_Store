@@ -220,12 +220,12 @@ app.post('/deleteElectronicByID', async (req,res) =>{
 app.post('/addHardware', async (req,res) => {
     try{
         let hardware = {
-            hardwareBrand: req.body.electronicsBrand,
-            hardwareModel: req.body.electronicsModel,
+            hardwareBrand: req.body.hardwareBrand,
+            hardwareModel: req.body.hardwareModel,
             hardwarePrice: req.body.hardwarePrice,
             hardwareQuantity: req.body.hardwareQuantity,
-            hardwareYear: req.body.electronicsYear,
-            hardwareExpiration: req.body.electronicsExpiration
+            hardwareYear: req.body.hardwareYear,
+            hardwareExpiration: req.body.hardwareExpiration
         }
         await Hardware(hardware).save().then(s => {
             return res.status(201).json("Hardware Added");
@@ -261,12 +261,12 @@ app.post('/hardwareById', async (req, res) =>{
     try{
         hardwares = await Hardware.updateOne({"_id": req.body.id}
         , {
-            hardwareBrand: req.body.electronicsBrand,
-            hardwareModel: req.body.electronicsModel,
+            hardwareBrand: req.body.hardwareBrand,
+            hardwareModel: req.body.hardwareModel,
             hardwarePrice: req.body.hardwarePrice,
             hardwareQuantity: req.body.hardwareQuantity,
-            hardwareYear: req.body.electronicsYear,
-            hardwareExpiration: req.body.electronicsExpiration
+            hardwareYear: req.body.hardwareYear,
+            hardwareExpiration: req.body.hardwareExpiration
         }, {upsert: true});
         if(hardwares)
        {
@@ -393,7 +393,7 @@ app.post('/addPerishable', async (req,res) => {
         let perishable = {
             perishableBrand: req.body.perishableBrand,
             perishableName: req.body.perishableName,
-            perishablePrice: req.body.appliancePrice,
+            perishablePrice: req.body.perishablePrice,
             perishableQuantity: req.body.perishableQuantity,
             perishableStockDate: req.body.perishableStockDate,
             perishableExpiration: req.body.perishableExpiration
