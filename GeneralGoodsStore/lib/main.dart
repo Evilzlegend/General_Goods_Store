@@ -1,8 +1,5 @@
 //import 'dart:js_util';
 import 'dart:ui';
-
-import 'package:test_app/Models/perishables.dart';
-
 import 'api.dart';
 import 'package:flutter/material.dart';
 //import 'dart:developer';
@@ -49,16 +46,32 @@ class _MyHomePageState extends State<MyHomePage> {
     "HomeGoods",
     "Perishables"
   ];
+  List<Color> AppColor = [
+    Colors.amber,
+    Colors.yellow,
+    Colors.brown.shade300,
+    Colors.grey,
+    Colors.pink.shade100
+  ];
+  List<Image> DisplayImages = [
+    Image.asset('assets/images/Appliances.jpg'),
+    Image.asset('assets/images/Electronics.png'),
+    Image.asset('assets/images/Hardware.png'),
+    Image.asset('assets/images/HomeGoods.png'),
+    Image.asset('assets/images/Perishables.png')
+  ];
+
+  double SidePicked = 0;
 
   int updateValue = 0;
 
   void _UpdateApp(DragEndDetails details) {
     int NewCoice = MenuChoice;
 
-    print(details.primaryVelocity);
-    print(details.hashCode.toString());
+    //print(details.primaryVelocity);
+    //print(details.hashCode.toString());
 
-    if (double.parse(details.primaryVelocity.toString()) < 0) {
+    if (SidePicked < 200) {
       if (NewCoice == 4) {
         NewCoice = 0;
       } else {
@@ -77,8 +90,20 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _UpdateValue(DragStartDetails details) {
-    print(details.localPosition);
+  void _StartValue(DragStartDetails details) {
+    String Value = details.localPosition.toString().split(",")[0];
+    String RealValue = Value.split("Offset(")[1];
+
+    SidePicked = double.parse(RealValue);
+
+    //print(RealValue);
+  }
+
+  void _UpdateValue(DragUpdateDetails details) {
+    String Value = details.localPosition.toString().split(",")[0];
+    String RealValue = Value.split("Offset(")[1];
+
+    SidePicked = double.parse(RealValue);
   }
 
   void initState() {
@@ -119,11 +144,16 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(Titles[MenuChoice]),
-        ),
+            backgroundColor: AppColor[MenuChoice],
+            title: Text(Titles[MenuChoice],
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                    color: Colors.black))),
         body: GestureDetector(
-          onHorizontalDragStart: _UpdateValue,
+          onHorizontalDragStart: _StartValue,
           onHorizontalDragEnd: _UpdateApp,
+          onHorizontalDragUpdate: _UpdateValue,
           child: (MenuChoice == 0)
               ? Column(
                   children: [
@@ -131,12 +161,17 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: ListView(
                         shrinkWrap: true,
                         children: [
-                          ...Applliances.map<Widget>((Appliance) =>
-                              _buildAppliance(
-                                  Appliance['applianceBrand'],
-                                  Appliance['applianceModel'],
-                                  "\$" + Appliance['appliancePrice'],
-                                  Colors.amber))
+                          DisplayImages[MenuChoice],
+                          ...Applliances.map<Widget>(
+                              (Appliance) => GestureDetector(
+                                    onTap: () => {},
+                                    child: _buildAppliance(
+                                        Appliance['applianceQuantity'],
+                                        Appliance['applianceBrand'],
+                                        Appliance['applianceModel'],
+                                        "\$" + Appliance['appliancePrice'],
+                                        AppColor[MenuChoice]),
+                                  ))
                         ],
                       ),
                     )
@@ -149,12 +184,16 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: ListView(
                             shrinkWrap: true,
                             children: [
+                              DisplayImages[MenuChoice],
                               ...Electronics.map<Widget>((Electronic) =>
-                                  _buildAppliance(
-                                      Electronic['electronicsBrand'],
-                                      Electronic['electronicsModel'],
-                                      "\$" + Electronic['electronicsPrice'],
-                                      Colors.yellow))
+                                  GestureDetector(
+                                      onTap: () => {},
+                                      child: _buildAppliance(
+                                          Electronic['electronicsQuantity'],
+                                          Electronic['electronicsBrand'],
+                                          Electronic['electronicsModel'],
+                                          "\$" + Electronic['electronicsPrice'],
+                                          AppColor[MenuChoice])))
                             ],
                           ),
                         )
@@ -167,12 +206,18 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: ListView(
                                 shrinkWrap: true,
                                 children: [
+                                  DisplayImages[MenuChoice],
                                   ...Hardware.map<Widget>((HardwareItems) =>
-                                      _buildAppliance(
-                                          HardwareItems['hardwareBrand'],
-                                          HardwareItems['hardwareModel'],
-                                          "\$" + HardwareItems['hardwarePrice'],
-                                          Colors.brown))
+                                      GestureDetector(
+                                          onTap: () => {},
+                                          child: _buildAppliance(
+                                              HardwareItems['hardwareQuantity'],
+                                              HardwareItems['hardwareBrand'],
+                                              HardwareItems['hardwareModel'],
+                                              "\$" +
+                                                  HardwareItems[
+                                                      'hardwarePrice'],
+                                              AppColor[MenuChoice])))
                                 ],
                               ),
                             )
@@ -185,12 +230,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: ListView(
                                     shrinkWrap: true,
                                     children: [
+                                      DisplayImages[MenuChoice],
                                       ...Homegoods.map<Widget>((Homegood) =>
-                                          _buildAppliance(
-                                              Homegood['homegoodsBrand'],
-                                              Homegood['homegoodsModel'],
-                                              "\$" + Homegood['homegoodsPrice'],
-                                              Colors.grey))
+                                          GestureDetector(
+                                              onTap: () => {},
+                                              child: _buildAppliance(
+                                                  Homegood['homegoodsQuantity'],
+                                                  Homegood['homegoodsBrand'],
+                                                  Homegood['homegoodsModel'],
+                                                  "\$" +
+                                                      Homegood[
+                                                          'homegoodsPrice'],
+                                                  AppColor[MenuChoice])))
                                     ],
                                   ),
                                 )
@@ -202,15 +253,21 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: ListView(
                                     shrinkWrap: true,
                                     children: [
+                                      DisplayImages[MenuChoice],
                                       ...Perishables.map<Widget>((Homegood) =>
-                                          _buildExpirable(
-                                              Homegood['perishableBrand'],
-                                              Homegood['perishableName'],
-                                              "\$" +
-                                                  Homegood['perishablePrice'],
-                                              Colors.pink.shade100,
-                                              DateTime.parse(Homegood[
-                                                  'perishableExpiration'])))
+                                          GestureDetector(
+                                              onTap: () => {},
+                                              child: _buildExpirable(
+                                                  Homegood[
+                                                      'perishableQuantity'],
+                                                  Homegood['perishableBrand'],
+                                                  Homegood['perishableName'],
+                                                  "\$" +
+                                                      Homegood[
+                                                          'perishablePrice'],
+                                                  AppColor[MenuChoice],
+                                                  DateTime.parse(Homegood[
+                                                      'perishableExpiration']))))
                                     ],
                                   ),
                                 )
@@ -220,8 +277,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-Widget _buildAppliance(
-    String title, String subTitle, String price, Color BackgroundColor) {
+Widget _buildAppliance(String qty, String title, String subTitle, String price,
+    Color BackgroundColor) {
   Widget returnValue = Padding(
       padding: const EdgeInsets.all(4),
       child: Card(
@@ -231,7 +288,7 @@ Widget _buildAppliance(
             ListTile(
               leading: SizedBox(
                 child: Text(
-                  price,
+                  price + "\n" + qty + "\n" + "in stock.",
                   textAlign: TextAlign.center,
                 ),
                 width: 75,
@@ -250,14 +307,14 @@ Widget _buildAppliance(
   return (returnValue);
 }
 
-Widget _buildExpirable(String title, String subTitle, String price,
+Widget _buildExpirable(String qty, String title, String subTitle, String price,
     Color BackgroundColor, DateTime ExpireDate) {
   DateTime AddedDate = ExpireDate.add(const Duration(days: 0));
 
   String DateString = AddedDate.year.toString() +
-      " " +
+      "/" +
       AddedDate.month.toString() +
-      " " +
+      "/" +
       AddedDate.day.toString();
 
   Widget returnValue = Padding(
@@ -269,7 +326,7 @@ Widget _buildExpirable(String title, String subTitle, String price,
             ListTile(
               leading: SizedBox(
                 child: Text(
-                  price,
+                  price + "\n" + qty + "\n" + "in stock.",
                   textAlign: TextAlign.center,
                 ),
                 width: 75,
