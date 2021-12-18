@@ -43,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List Perishables = [];
   List<String> Titles = [
     "Appliances",
-    "Eletronics",
+    "Electronics",
     "Hardware",
     "HomeGoods",
     "Perishables"
