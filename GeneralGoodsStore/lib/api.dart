@@ -41,22 +41,77 @@ class InventoryApi {
   }
 
   deleteAppliance(String id) async {
-    await _dio.post('/deleteApplianceByID', data: {'_id': id});
+    await _dio.post('/deleteApplianceByID', data: {'id': id});
   }
 
   deleteElectronics(String id) async {
-    await _dio.post('/deleteElectronicByID', data: {'_id': id});
+    await _dio.post('/deleteElectronicByID', data: {'id': id});
   }
 
   deleteHardware(String id) async {
-    await _dio.post('/deleteHardwareByID', data: {'_id': id});
+    await _dio.post('/deleteHardwareByID', data: {'id': id});
   }
 
   deleteHomegoods(String id) async {
-    await _dio.post('/deleteHomegoodByID', data: {'_id': id});
+    await _dio.post('/deleteHomegoodByID', data: {'id': id});
   }
 
   deletePerishables(String id) async {
-    await _dio.post('/deletePerishableByID', data: {'_id': id});
+    await _dio.post('/deletePerishableByID', data: {'id': id});
+  }
+
+  editAppliance(String id, String applianceBrand, String applianceModel,
+      String appliancePrice, String applianceQuantity) async {
+    await _dio.post('/editApplianceById', data: {
+      'id': id,
+      'applianceBrand': applianceBrand,
+      'applianceModel': applianceModel,
+      'appliancePrice': appliancePrice,
+      'applianceQuantity': applianceQuantity
+    });
+  }
+
+  editElectronics(String id, String electronicsBrand, String electronicsModel,
+      String electronicsPrice, String electronicsQuantity) async {
+    await _dio.post('/editElectronicById', data: {
+      'id': id,
+      'electronicsBrand': electronicsBrand,
+      'electronicsModel': electronicsModel,
+      'electronicsPrice': electronicsPrice,
+      'electronicsQuantity': electronicsQuantity
+    });
+  }
+
+  editHardware(String id, String hardwareBrand, String hardwareModel,
+      String hardwarePrice, String hardwareQuantity) async {
+    await _dio.post('/editHardwareById', data: {
+      'id': id,
+      'hardwareBrand': hardwareBrand,
+      'hardwareModel': hardwareModel,
+      'hardwarePrice': hardwarePrice,
+      'hardwareQuantity': hardwareQuantity
+    });
+  }
+
+  editHomegoods(String id, String homegoodsBrand, String homegoodsModel,
+      String homegoodsPrice, String homegoodsQuantity) async {
+    await _dio.post('/editHomegoodsById', data: {
+      'id': id,
+      'homegoodsBrand': homegoodsBrand,
+      'homegoodsModel': homegoodsModel,
+      'homegoodsPrice': homegoodsPrice,
+      'homegoodsQuantity': homegoodsQuantity
+    });
+  }
+
+  editPerishable(String id, String perishableBrand, String perishableModel,
+      String perishablePrice, String perishableQuantity) async {
+    await _dio.post('/editPerishableById', data: {
+      'id': id,
+      'perishableBrand': perishableBrand,
+      'perishableModel': perishableModel,
+      'perishablePrice': perishablePrice,
+      'perishableQuantity': perishableQuantity
+    });
   }
 }
