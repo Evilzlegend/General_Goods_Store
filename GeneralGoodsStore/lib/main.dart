@@ -1,8 +1,10 @@
 //import 'dart:js_util';
+import 'dart:async';
 import 'dart:ui';
 import 'api.dart';
 import 'package:flutter/material.dart';
 //import 'dart:developer';
+import 'update.dart';
 
 void main() {
   runApp(MyApp());
@@ -48,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
   List<Color> AppColor = [
     Colors.amber,
-    Colors.yellow,
+    Colors.green.shade400,
     Colors.brown.shade300,
     Colors.grey,
     Colors.pink.shade100
@@ -108,34 +110,36 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void initState() {
     super.initState();
-    widget.api.getAppliances().then((data) {
-      setState(() {
-        Applliances = data;
+    Timer(Duration(seconds: 1), () {
+      widget.api.getAppliances().then((data) {
+        setState(() {
+          Applliances = data;
+        });
       });
-    });
 
-    widget.api.getElectronics().then((data) {
-      setState(() {
-        Electronics = data;
+      widget.api.getElectronics().then((data) {
+        setState(() {
+          Electronics = data;
+        });
       });
-    });
 
-    widget.api.getHardware().then((data) {
-      setState(() {
-        Hardware = data;
+      widget.api.getHardware().then((data) {
+        setState(() {
+          Hardware = data;
+        });
       });
-    });
 
-    widget.api.getHomegoods().then((data) {
-      setState(() {
-        Homegoods = data;
+      widget.api.getHomegoods().then((data) {
+        setState(() {
+          Homegoods = data;
+        });
       });
-    });
 
-    widget.api.getPerishables().then((data) {
-      setState(() {
-        Perishables = data;
-        Loaded = true;
+      widget.api.getPerishables().then((data) {
+        setState(() {
+          Perishables = data;
+          Loaded = true;
+        });
       });
     });
   }
@@ -143,41 +147,19 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            backgroundColor: AppColor[MenuChoice],
-            title: Text(Titles[MenuChoice],
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
-                    color: Colors.black))),
-        body: GestureDetector(
-          onHorizontalDragStart: _StartValue,
-          onHorizontalDragEnd: _UpdateApp,
-          onHorizontalDragUpdate: _UpdateValue,
-          child: (MenuChoice == 0)
-              ? Column(
-                  children: [
-                    Expanded(
-                      child: ListView(
-                        shrinkWrap: true,
-                        children: [
-                          DisplayImages[MenuChoice],
-                          ...Applliances.map<Widget>(
-                              (Appliance) => GestureDetector(
-                                    onTap: () => {},
-                                    child: _buildAppliance(
-                                        Appliance['applianceQuantity'],
-                                        Appliance['applianceBrand'],
-                                        Appliance['applianceModel'],
-                                        "\$" + Appliance['appliancePrice'],
-                                        AppColor[MenuChoice]),
-                                  ))
-                        ],
-                      ),
-                    )
-                  ],
-                )
-              : (MenuChoice == 1)
+      appBar: AppBar(
+          backgroundColor: AppColor[MenuChoice],
+          title: Text(Titles[MenuChoice],
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                  color: Colors.black))),
+      body: Loaded
+          ? GestureDetector(
+              onHorizontalDragStart: _StartValue,
+              onHorizontalDragEnd: _UpdateApp,
+              onHorizontalDragUpdate: _UpdateValue,
+              child: (MenuChoice == 0)
                   ? Column(
                       children: [
                         Expanded(
@@ -185,21 +167,36 @@ class _MyHomePageState extends State<MyHomePage> {
                             shrinkWrap: true,
                             children: [
                               DisplayImages[MenuChoice],
-                              ...Electronics.map<Widget>((Electronic) =>
+                              ...Applliances.map<Widget>((Appliance) =>
                                   GestureDetector(
-                                      onTap: () => {},
-                                      child: _buildAppliance(
-                                          Electronic['electronicsQuantity'],
-                                          Electronic['electronicsBrand'],
-                                          Electronic['electronicsModel'],
-                                          "\$" + Electronic['electronicsPrice'],
-                                          AppColor[MenuChoice])))
+                                    onTap: () => {
+                                      Navigator.pop(context),
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Update(
+                                                  Appliance['_id'],
+                                                  Appliance['applianceBrand'],
+                                                  Appliance['applianceModel'],
+                                                  Appliance['appliancePrice'],
+                                                  Appliance[
+                                                      'applianceQuantity'],
+                                                  AppColor[MenuChoice],
+                                                  MenuChoice)))
+                                    },
+                                    child: _buildAppliance(
+                                        Appliance['applianceQuantity'],
+                                        Appliance['applianceBrand'],
+                                        Appliance['applianceModel'],
+                                        "\$" + Appliance['appliancePrice'],
+                                        AppColor[MenuChoice]),
+                                  ))
                             ],
                           ),
                         )
                       ],
                     )
-                  : (MenuChoice == 2)
+                  : (MenuChoice == 1)
                       ? Column(
                           children: [
                             Expanded(
@@ -207,23 +204,41 @@ class _MyHomePageState extends State<MyHomePage> {
                                 shrinkWrap: true,
                                 children: [
                                   DisplayImages[MenuChoice],
-                                  ...Hardware.map<Widget>((HardwareItems) =>
+                                  ...Electronics.map<Widget>((Electronic) =>
                                       GestureDetector(
-                                          onTap: () => {},
+                                          onTap: () => {
+                                                Navigator.pop(context),
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) => Update(
+                                                            Electronic['_id'],
+                                                            Electronic[
+                                                                'electronicsBrand'],
+                                                            Electronic[
+                                                                'electronicsModel'],
+                                                            Electronic[
+                                                                'electronicsPrice'],
+                                                            Electronic[
+                                                                'electronicsQuantity'],
+                                                            AppColor[
+                                                                MenuChoice],
+                                                            MenuChoice)))
+                                              },
                                           child: _buildAppliance(
-                                              HardwareItems['hardwareQuantity'],
-                                              HardwareItems['hardwareBrand'],
-                                              HardwareItems['hardwareModel'],
+                                              Electronic['electronicsQuantity'],
+                                              Electronic['electronicsBrand'],
+                                              Electronic['electronicsModel'],
                                               "\$" +
-                                                  HardwareItems[
-                                                      'hardwarePrice'],
+                                                  Electronic[
+                                                      'electronicsPrice'],
                                               AppColor[MenuChoice])))
                                 ],
                               ),
                             )
                           ],
                         )
-                      : (MenuChoice == 3)
+                      : (MenuChoice == 2)
                           ? Column(
                               children: [
                                 Expanded(
@@ -231,49 +246,151 @@ class _MyHomePageState extends State<MyHomePage> {
                                     shrinkWrap: true,
                                     children: [
                                       DisplayImages[MenuChoice],
-                                      ...Homegoods.map<Widget>((Homegood) =>
+                                      ...Hardware.map<Widget>((HardwareItems) =>
                                           GestureDetector(
-                                              onTap: () => {},
+                                              onTap: () => {
+                                                    Navigator.pop(context),
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) => Update(
+                                                                HardwareItems[
+                                                                    '_id'],
+                                                                HardwareItems[
+                                                                    'hardwareBrand'],
+                                                                HardwareItems[
+                                                                    'hardwareModel'],
+                                                                HardwareItems[
+                                                                    'hardwarePrice'],
+                                                                HardwareItems[
+                                                                    'hardwareQuantity'],
+                                                                AppColor[
+                                                                    MenuChoice],
+                                                                MenuChoice)))
+                                                  },
                                               child: _buildAppliance(
-                                                  Homegood['homegoodsQuantity'],
-                                                  Homegood['homegoodsBrand'],
-                                                  Homegood['homegoodsModel'],
+                                                  HardwareItems[
+                                                      'hardwareQuantity'],
+                                                  HardwareItems[
+                                                      'hardwareBrand'],
+                                                  HardwareItems[
+                                                      'hardwareModel'],
                                                   "\$" +
-                                                      Homegood[
-                                                          'homegoodsPrice'],
+                                                      HardwareItems[
+                                                          'hardwarePrice'],
                                                   AppColor[MenuChoice])))
                                     ],
                                   ),
                                 )
                               ],
                             )
-                          : Column(
-                              children: [
-                                Expanded(
-                                  child: ListView(
-                                    shrinkWrap: true,
-                                    children: [
-                                      DisplayImages[MenuChoice],
-                                      ...Perishables.map<Widget>((Homegood) =>
-                                          GestureDetector(
-                                              onTap: () => {},
-                                              child: _buildExpirable(
-                                                  Homegood[
-                                                      'perishableQuantity'],
-                                                  Homegood['perishableBrand'],
-                                                  Homegood['perishableName'],
-                                                  "\$" +
+                          : (MenuChoice == 3)
+                              ? Column(
+                                  children: [
+                                    Expanded(
+                                      child: ListView(
+                                        shrinkWrap: true,
+                                        children: [
+                                          DisplayImages[MenuChoice],
+                                          ...Homegoods.map<Widget>((Homegood) =>
+                                              GestureDetector(
+                                                  onTap: () => {
+                                                        Navigator.pop(context),
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) => Update(
+                                                                    Homegood[
+                                                                        '_id'],
+                                                                    Homegood[
+                                                                        'homegoodsBrand'],
+                                                                    Homegood[
+                                                                        'homegoodsModel'],
+                                                                    Homegood[
+                                                                        'homegoodsPrice'],
+                                                                    Homegood[
+                                                                        'homegoodsQuantity'],
+                                                                    AppColor[
+                                                                        MenuChoice],
+                                                                    MenuChoice)))
+                                                      },
+                                                  child: _buildAppliance(
                                                       Homegood[
-                                                          'perishablePrice'],
-                                                  AppColor[MenuChoice],
-                                                  DateTime.parse(Homegood[
-                                                      'perishableExpiration']))))
-                                    ],
-                                  ),
+                                                          'homegoodsQuantity'],
+                                                      Homegood[
+                                                          'homegoodsBrand'],
+                                                      Homegood[
+                                                          'homegoodsModel'],
+                                                      "\$" +
+                                                          Homegood[
+                                                              'homegoodsPrice'],
+                                                      AppColor[MenuChoice])))
+                                        ],
+                                      ),
+                                    )
+                                  ],
                                 )
-                              ],
-                            ),
-        ));
+                              : Column(
+                                  children: [
+                                    Expanded(
+                                      child: ListView(
+                                        shrinkWrap: true,
+                                        children: [
+                                          DisplayImages[MenuChoice],
+                                          ...Perishables.map<Widget>(
+                                              (Homegood) => GestureDetector(
+                                                  onTap: () => {
+                                                        Navigator.pop(context),
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) => Update(
+                                                                    Homegood[
+                                                                        '_id'],
+                                                                    Homegood[
+                                                                        'perishableBrand'],
+                                                                    Homegood[
+                                                                        'perishableName'],
+                                                                    Homegood[
+                                                                        'perishableBrand'],
+                                                                    Homegood[
+                                                                        'perishableQuantity'],
+                                                                    AppColor[
+                                                                        MenuChoice],
+                                                                    MenuChoice)))
+                                                      },
+                                                  child: _buildExpirable(
+                                                      Homegood[
+                                                          'perishableQuantity'],
+                                                      Homegood[
+                                                          'perishableBrand'],
+                                                      Homegood[
+                                                          'perishableName'],
+                                                      "\$" +
+                                                          Homegood[
+                                                              'perishablePrice'],
+                                                      AppColor[MenuChoice],
+                                                      DateTime.parse(Homegood[
+                                                          'perishableExpiration']))))
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+            )
+          : Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const <Widget>[
+                  Text("Database Loading",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                  CircularProgressIndicator()
+                ],
+              ),
+            ),
+    );
   }
 }
 
